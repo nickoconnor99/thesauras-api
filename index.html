@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Thesauras</h1>
+    <form id="word-form" onsubmit="getResults(event)">
+      <label for="word">Input Word</label>
+      <input id="word" />
+      <button type="submit">Enter</button>
+      <ul id="list">
+        <li>hot</li>
+      </ul>
+    </form>
+
+    <script>
+      async function getResults(e) {
+        e.preventDefault();
+
+        const word = document.getElementById("word").value;
+
+        const results = await fetch(
+          `https://words.bighugelabs.com/api/2/063a2dc61eccac3c8529b450ae35c335/${word}/json`
+        );
+        const data = await results.json();
+
+        let words = [];
+        for (let entry of data.adjective.syn) {
+          words.push(entry);
+        }
+        const ul = document.getElementById("list");
+        ul.innerHTML = "";
+        for (let aWord of words) {
+          const li = document.createElement("li");
+          li.innerText = aWord;
+          ul.appendChild(li);
+        }
+      }
+    </script>
+  </body>
+</html>
